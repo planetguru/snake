@@ -25,8 +25,9 @@ for (let element of trace) {
     led.plot(element.XPos, element.YPos)
 }
 
-// initialise snack as a point with rogue default values 
+// initialise snack with rogue values 
 let snack: point = new point(-1, -1)
+// then reset snack and draw it
 setSnack()
 
 // randomly set new snack point, but not on snake
@@ -37,7 +38,7 @@ function setSnack() {
         let snackYPos: number = Math.random(5)
         newSnack.set(snackXPos, snackYPos)
     } while (true == isSnakeOnPoint(newSnack))
-    snack.set(newSnack.XPos, newSnack.YPos)
+    snack = newSnack
     led.plot(snack.XPos, snack.YPos)
 }
 
