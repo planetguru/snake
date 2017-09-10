@@ -1,5 +1,6 @@
 // initialise direction with a default value
 let Dir = 0
+let Score = 0
 
 // define starting snake as two point objects in 'trace'array
 let trace: point[] = [
@@ -70,6 +71,10 @@ input.onButtonPressed(Button.B, () => {
     }
 })
 
+input.onButtonPressed(Button.AB, () => {
+    control.reset()
+})
+
 input.onButtonPressed(Button.A, () => {
     switch (Dir) {
         case 0:
@@ -118,6 +123,7 @@ basic.forever(() => {
     // if snake landed on a snack, don't delete the last segment
     if (trace[0].XPos == snack.XPos && trace[0].YPos == snack.YPos) {
         // set new snack position
+        Score++
         setSnack()
     } else {
         led.unplot(trace[trace.length - 1].XPos, trace[trace.length - 1].YPos)
@@ -126,7 +132,7 @@ basic.forever(() => {
 })
 
 function endGame() {
-    basic.showIcon(IconNames.Sad)
+    basic.showString(Score.toString())
 }
 
 function isSnakeOutOfBounds() {
