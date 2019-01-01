@@ -35,8 +35,8 @@ setSnack()
 function setSnack() {
     let newSnack: point = new point(-1, -1)
     do {
-        let snackXPos: number = Math.random(5)
-        let snackYPos: number = Math.random(5)
+        let snackXPos: number = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+        let snackYPos: number = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
         newSnack.set(snackXPos, snackYPos)
     } while (true == isSnakeOnPoint(newSnack))
     snack = newSnack
