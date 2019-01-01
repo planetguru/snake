@@ -2,12 +2,6 @@
 let Dir = 0
 let Score = 0
 
-// define starting snake as two point objects in 'trace'array
-let trace: point[] = [
-    new point(1, 0),
-    new point(0, 0)
-]
-
 class point {
     XPos: number
     YPos: number
@@ -20,6 +14,12 @@ class point {
         this.YPos = y;
     }
 }
+
+// define starting snake as two point objects in 'trace'array
+let trace: point[] = [
+    new point(1, 0),
+    new point(0, 0)
+]
 
 // show starting snake
 for (let element of trace) {
