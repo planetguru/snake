@@ -1,9 +1,11 @@
 /* 
 Snake for BBC MicroBit
-Written by Christopher Lacy-Hulbert
-christo@uk.com 
+Written by Christopher Lacy-Hulbert, christo@uk.com 
 updated 20th Feb 2021
+game can be played here: https://makecode.microbit.org/_duoWYYhVFe6H
+or you can download it to a microbit controller and play it for real!
 */
+
 // initialise direction with a default value
 let Dir = 0
 class Point {
