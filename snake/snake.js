@@ -1,52 +1,53 @@
+/* 
+Snake for BBC MicroBit
+Written by Christopher Lacy-Hulbert
+christo@uk.com 
+updated 20th Feb 2021
+*/
 // initialise direction with a default value
 let Dir = 0
-let Score = 0
-
-class point {
-    XPos: number
-    YPos: number
-    constructor(x: number, y: number) {
-        this.XPos = x;
-        this.YPos = y;
-    }
-    set(x: number, y: number) {
-        this.XPos = x;
-        this.YPos = y;
+class Point {
+    x: number;
+    y: number;
+    constructor(xvalue: number, yvalue: number) {
+        this.x = xvalue;
+        this.y = yvalue;
     }
 }
 
 // define starting snake as two point objects in 'trace'array
-let trace: point[] = [
-    new point(1, 0),
-    new point(0, 0)
+let trace: Point[] = [
+    new Point(1, 0),
+    new Point(0, 0)
 ]
 
 // show starting snake
 for (let element of trace) {
-    led.plot(element.XPos, element.YPos)
+    led.plot(element.x, element.y)
 }
 
 // initialise snack with rogue values 
-let snack: point = new point(-1, -1)
+let snack: Point = new Point(-1, -1)
 // then reset snack and draw it
 setSnack()
 
 // randomly set new snack point, but not on snake
 function setSnack() {
-    let newSnack: point = new point(-1, -1)
+    let newSnack: Point = new Point(-1, -1)
     do {
-        let snackXPos: number = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-        let snackYPos: number = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-        newSnack.set(snackXPos, snackYPos)
+        let snackXPos: number = Math.floor(Math.random() * 4) 
+        let snackYPos: number = Math.floor(Math.random() * 4)
+        newSnack.x = snackXPos;
+        newSnack.y = snackYPos;
     } while (true == isSnakeOnPoint(newSnack))
     snack = newSnack
-    led.plot(snack.XPos, snack.YPos)
+    led.plot(snack.x, snack.y)
 }
 
-function isSnakeOnPoint(pt: point) {
+function isSnakeOnPoint(pt: Point) {
     let result: boolean = false
     for (let element of trace) {
-        if (element.XPos == pt.XPos && element.YPos == pt.YPos) {
+        if (element.x == pt.x && element.y == pt.y) {
             result = true
             break
         }
@@ -71,10 +72,6 @@ input.onButtonPressed(Button.B, () => {
     }
 })
 
-input.onButtonPressed(Button.AB, () => {
-    control.reset()
-})
-
 input.onButtonPressed(Button.A, () => {
     switch (Dir) {
         case 0:
@@ -95,20 +92,20 @@ input.onButtonPressed(Button.A, () => {
 basic.forever(() => {
     basic.pause(500)
     // initialise next head position with current head position
-    let nextPosition: point = new point(trace[0].XPos, trace[0].YPos)
+    let nextPosition: Point = new Point(trace[0].x, trace[0].y)
     // set next head position based on button states
     switch (Dir) {
         case 0:
-            nextPosition.XPos = trace[0].XPos + 1
+            nextPosition.x = trace[0].x + 1
             break;
         case 1:
-            nextPosition.YPos = trace[0].YPos + 1
+            nextPosition.y = trace[0].y + 1
             break;
         case 2:
-            nextPosition.XPos = trace[0].XPos - 1
+            nextPosition.x = trace[0].x - 1
             break;
         default:
-            nextPosition.YPos = trace[0].YPos - 1
+            nextPosition.y = trace[0].y - 1
             break;
     }
 
@@ -118,26 +115,25 @@ basic.forever(() => {
 
     // draw new head point in new position
     trace.unshift(nextPosition)
-    led.plot(trace[0].XPos, trace[0].YPos)
+    led.plot(trace[0].x, trace[0].y)
 
     // if snake landed on a snack, don't delete the last segment
-    if (trace[0].XPos == snack.XPos && trace[0].YPos == snack.YPos) {
+    if (trace[0].x == snack.x && trace[0].y == snack.y) {
         // set new snack position
-        Score++
         setSnack()
     } else {
-        led.unplot(trace[trace.length - 1].XPos, trace[trace.length - 1].YPos)
+        led.unplot(trace[trace.length - 1].x, trace[trace.length - 1].y)
         trace.pop()
     }
 })
 
 function endGame() {
-    basic.showString(Score.toString())
+    basic.showIcon(IconNames.Sad)
 }
 
 function isSnakeOutOfBounds() {
     let result: boolean = false
-    if (trace[0].XPos > 4 || trace[0].XPos < 0 || trace[0].YPos > 4 || trace[0].YPos < 0) {
+    if (trace[0].x > 4 || trace[0].x < 0 || trace[0].y > 4 || trace[0].y < 0) {
         result = true
     } else {
         result = false
