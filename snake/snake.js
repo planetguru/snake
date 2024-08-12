@@ -8,6 +8,7 @@ or you can download it to a microbit controller and play it for real!
 
 // initialise direction with a default value
 let Dir = 0
+let score = -1;
 class Point {
     x: number;
     y: number;
@@ -37,13 +38,14 @@ setSnack()
 function setSnack() {
     let newSnack: Point = new Point(-1, -1)
     do {
-        let snackXPos: number = Math.floor(Math.random() * 4) 
+        let snackXPos: number = Math.floor(Math.random() * 4)
         let snackYPos: number = Math.floor(Math.random() * 4)
         newSnack.x = snackXPos;
         newSnack.y = snackYPos;
     } while (true == isSnakeOnPoint(newSnack))
     snack = newSnack
     led.plot(snack.x, snack.y)
+    score++;
 }
 
 function isSnakeOnPoint(pt: Point) {
@@ -130,6 +132,7 @@ basic.forever(() => {
 })
 
 function endGame() {
+    basic.showString(score.toString())
     basic.showIcon(IconNames.Sad)
 }
 
@@ -137,8 +140,6 @@ function isSnakeOutOfBounds() {
     let result: boolean = false
     if (trace[0].x > 4 || trace[0].x < 0 || trace[0].y > 4 || trace[0].y < 0) {
         result = true
-    } else {
-        result = false
     }
     return result
 }
