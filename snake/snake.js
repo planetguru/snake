@@ -9,6 +9,8 @@ or you can download it to a microbit controller and play it for real!
 // initialise direction with a default value
 let Dir = 0
 let score = -1;
+let hiScore = 0;
+
 class Point {
     x: number;
     y: number;
@@ -24,6 +26,9 @@ let trace: Point[] = [
     new Point(0, 0)
 ]
 
+// clear all leds first
+basic.clearScreen();
+
 // show starting snake
 for (let element of trace) {
     led.plot(element.x, element.y)
@@ -31,8 +36,10 @@ for (let element of trace) {
 
 // initialise snack with rogue values 
 let snack: Point = new Point(-1, -1)
+
 // then reset snack and draw it
 setSnack()
+
 
 // randomly set new snack point, but not on snake
 function setSnack() {
@@ -93,6 +100,10 @@ input.onButtonPressed(Button.A, () => {
     }
 })
 
+input.onButtonPressed(Button.AB, () => {
+    // reset();
+})
+
 basic.forever(() => {
     basic.pause(500)
     // initialise next head position with current head position
@@ -132,8 +143,15 @@ basic.forever(() => {
 })
 
 function endGame() {
-    basic.showString(score.toString())
-    basic.showIcon(IconNames.Sad)
+    while (!input.buttonIsPressed(Button.AB)) {
+        basic.showString(score.toString())
+        if(score>hiScore){
+            basic.showIcon(IconNames.Heart)
+            basic.showIcon(IconNames.SmallHeart)
+        }else{
+            basic.showIcon(IconNames.Sad)
+        }
+    }
 }
 
 function isSnakeOutOfBounds() {
