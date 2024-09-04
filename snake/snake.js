@@ -1,16 +1,3 @@
-/* 
-Snake for BBC MicroBit
-Written by Christopher Lacy-Hulbert, christo@uk.com 
-updated 20th Feb 2021
-game can be played here: https://makecode.microbit.org/_duoWYYhVFe6H
-or you can download it to a microbit controller and play it for real!
-*/
-
-// initialise direction with a default value
-let Dir = 0
-let score = -1;
-let hiScore = 0;
-
 class Point {
     x: number;
     y: number;
@@ -20,36 +7,39 @@ class Point {
     }
 }
 
-// define starting snake as two point objects in 'trace'array
-let trace: Point[] = [
-    new Point(1, 0),
-    new Point(0, 0)
-]
-
-// clear all leds first
-basic.clearScreen();
-
-// show starting snake
-for (let element of trace) {
-    led.plot(element.x, element.y)
-}
-
-// initialise snack with rogue values 
+let Dir = 0
+let score = -1;
+let hiScore = 0;
+let trace: Point[] = []
 let snack: Point = new Point(-1, -1)
 
-// then reset snack and draw it
-setSnack()
+function startGame() {
+    // Reset direction, score, and snake trace
+    Dir = 0
+    score = -1;
+    trace = [
+        new Point(1, 0),
+        new Point(0, 0)
+    ]
 
+    // Clear the screen and show the starting snake
+    basic.clearScreen();
+    for (let element of trace) {
+        led.plot(element.x, element.y)
+    }
 
-// randomly set new snack point, but not on snake
+    // Set and draw a new snack
+    setSnack()
+}
+
 function setSnack() {
     let newSnack: Point = new Point(-1, -1)
     do {
-        let snackXPos: number = Math.floor(Math.random() * 4)
-        let snackYPos: number = Math.floor(Math.random() * 4)
+        let snackXPos: number = Math.floor(Math.random() * 5)
+        let snackYPos: number = Math.floor(Math.random() * 5)
         newSnack.x = snackXPos;
         newSnack.y = snackYPos;
-    } while (true == isSnakeOnPoint(newSnack))
+    } while (isSnakeOnPoint(newSnack))
     snack = newSnack
     led.plot(snack.x, snack.y)
     score++;
@@ -100,10 +90,6 @@ input.onButtonPressed(Button.A, () => {
     }
 })
 
-input.onButtonPressed(Button.AB, () => {
-    // reset();
-})
-
 basic.forever(() => {
     basic.pause(500)
     // initialise next head position with current head position
@@ -143,13 +129,21 @@ basic.forever(() => {
 })
 
 function endGame() {
-    while (!input.buttonIsPressed(Button.AB)) {
+    while (true) {
         basic.showString(score.toString())
-        if(score>hiScore){
-            basic.showIcon(IconNames.Heart)
+        if (score > hiScore) {
             basic.showIcon(IconNames.SmallHeart)
-        }else{
+            basic.showIcon(IconNames.Heart)
+        } else {
             basic.showIcon(IconNames.Sad)
+        }
+
+        basic.pause(100) // Small pause to allow button press detection
+
+        if (input.buttonIsPressed(Button.AB)) {
+            hiScore = score;  // Update the hiScore
+            startGame();  // Restart the game after the AB button is pressed
+            break;
         }
     }
 }
@@ -161,3 +155,6 @@ function isSnakeOutOfBounds() {
     }
     return result
 }
+
+// Start the game when the program starts
+startGame();
